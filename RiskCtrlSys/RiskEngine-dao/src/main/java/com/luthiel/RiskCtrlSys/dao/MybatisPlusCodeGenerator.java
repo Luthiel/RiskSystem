@@ -30,7 +30,7 @@ public class MybatisPlusCodeGenerator {
          * 2.
          * mybatis-plus 代码生成器需要模板引擎：
          * a. velocity
-         * b. freemarker、
+         * b. freemarker
          * velocity是生成器中默认使用的
          *
          * *********************/

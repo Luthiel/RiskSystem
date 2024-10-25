@@ -16,7 +16,7 @@
         <!-- Flink基础依赖  -->
         <dependency>
             <groupId>org.apache.flink</groupId>
-            <artifactId>flink-java</artifactId>
+            <artifactId>flink-core</artifactId>
         </dependency>
         <!-- Flink WebUI -->
         <dependency>

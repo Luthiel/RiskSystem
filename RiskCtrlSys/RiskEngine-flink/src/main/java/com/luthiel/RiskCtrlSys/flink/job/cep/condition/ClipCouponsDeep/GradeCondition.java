@@ -5,7 +5,7 @@ import org.apache.flink.cep.pattern.conditions.SimpleCondition;
 
 /**
  * author: Luthiel
- * description: TODO
+ * description: 账号等级条件，L1 以上
  * date: 2023
  */
 
