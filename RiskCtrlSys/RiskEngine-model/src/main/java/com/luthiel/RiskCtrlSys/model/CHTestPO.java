@@ -10,6 +10,7 @@ import lombok.Data;
 
 
 @Data
+@Deprecated
 public class CHTestPO {
 
     private String name;

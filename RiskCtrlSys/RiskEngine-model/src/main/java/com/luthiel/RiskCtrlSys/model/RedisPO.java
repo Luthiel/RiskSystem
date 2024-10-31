@@ -11,9 +11,7 @@ import lombok.Data;
 @Data
 public class RedisPO {
 
-    /**
-     * Redis 值
-     */
+    // Redis 值
     private String data;
 
     public RedisPO() {

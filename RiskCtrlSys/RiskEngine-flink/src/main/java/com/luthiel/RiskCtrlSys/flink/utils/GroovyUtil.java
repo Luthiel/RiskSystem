@@ -108,7 +108,6 @@ public class GroovyUtil {
             //解析脚本
             Class<?> groovyScript = LOADER.parseClass(file);
 
-            //
             Class<Script> _groovyScript = (Class<Script>) groovyScript;
             //将文件md5编码以及所对应的 Class<Script> 对象写入HashMap,
             //用于下次的GroovyClassLoader单例判断

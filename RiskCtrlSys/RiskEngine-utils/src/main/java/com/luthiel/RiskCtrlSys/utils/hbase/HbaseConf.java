@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Configuration;
  *
  * 知识点：
  *
+ * @Configuration 用于标识配置类
  * @EnableConfigurationProperties不能单独使用
  * @EnableConfigurationProperties 和 @ConfigurationProperties组合使用
  *
@@ -42,7 +43,7 @@ public class HbaseConf {
     public org.apache.hadoop.conf.Configuration configuration() {
         org.apache.hadoop.conf.Configuration conf = HBaseConfiguration.create();
         Map<String,String> map = hbaseProperties.getConfMaps();
-        map.forEach((k,v)->{
+        map.forEach((k,v) -> {
             conf.set(k,v);
         });
 

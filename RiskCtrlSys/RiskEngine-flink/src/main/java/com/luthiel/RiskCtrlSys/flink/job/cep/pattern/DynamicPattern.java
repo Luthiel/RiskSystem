@@ -1,12 +1,13 @@
 package com.luthiel.RiskCtrlSys.flink.job.cep.pattern;
 
+import com.luthiel.RiskCtrlSys.flink.utils.GroovyUtil;
 import org.apache.flink.cep.pattern.Pattern;
 
 import java.io.Serializable;
 
 /**
  * author: Luthiel
- * description: TODO
+ * description:
  * date: 2023
  */
 
@@ -32,15 +33,15 @@ public class DynamicPattern<T> implements Serializable {
      */
     public Pattern<T,?> getDynamicPattern() {
 
-        return Pattern.<T>begin("a").oneOrMore();
-        //return (Pattern<T,?>) GroovyUtil.groovyEval(clazz,METHOD,null);
+//        return Pattern.<T>begin("a").oneOrMore();
+        return (Pattern<T,?>) GroovyUtil.groovyEval(clazz, METHOD,null);
 
     }
 
     /**
      * author: Luthiel
      * description: Pattern 规则的配置是否发生了改变
-     * @param :
+     * @param : TODO
      * @return boolean
      */
     public boolean patternChange() {

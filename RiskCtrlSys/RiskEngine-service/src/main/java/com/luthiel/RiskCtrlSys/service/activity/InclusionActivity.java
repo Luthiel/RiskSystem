@@ -7,4 +7,5 @@ package com.luthiel.RiskCtrlSys.service.activity;
  */
 
 public class InclusionActivity implements Activity {
+
 }

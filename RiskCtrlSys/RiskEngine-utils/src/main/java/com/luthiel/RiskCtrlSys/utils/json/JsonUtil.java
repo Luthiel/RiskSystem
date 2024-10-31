@@ -68,7 +68,8 @@ public class JsonUtil {
      * '颜色': ['黑色','白色']
      *
      * 后端可以以Map类型返回：
-     * Map<String,Array<String>>
+     * Map<String, List<String>>
+     * 将 {"xx":[{"xx": "xx"}, {"xx": "xx"}]} 结构转换为 Map<String, List<POJO>>
      *
      * *********************/
     public static <K,V> Map<K,List<V>> jsonStr2Map(String json,Class<K> key,Class<V> value) {

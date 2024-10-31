@@ -155,7 +155,7 @@ public class KafkaUtil {
                     KAFKA_SOURCE,
                     WatermarkStrategy.noWatermarks(),
                 "Kafka Source")
-                //将Kafka消息数据转换为用户事件行为POJO对象
+                //将Kafka消息数据转换为用户事件行为POJO对象, KafkaMessagePO -> EventPO
                 .map(new KafkaETL());
     }
 

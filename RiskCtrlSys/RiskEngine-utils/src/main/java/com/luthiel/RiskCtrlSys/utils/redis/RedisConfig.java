@@ -23,11 +23,11 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @Configuration
 public class RedisConfig {
 
-    //Redis配置信息读取类
+    // Redis配置信息读取类
     @Autowired
     private RedisProperties redisProperties;
 
-    //连接池配置信息读取类
+    // 连接池配置信息读取类
     @Autowired
     private RedisPoolProperties redisPoolProperties;
 
@@ -41,26 +41,21 @@ public class RedisConfig {
     public RedisTemplate<String,Object> redisTemplate() {
 
         RedisTemplate<String,Object> redisTemplate =  new RedisTemplate<>();
-
-        //key,value序列化配置
-
-        /* **********************
-         *
+        /*
          * 常用的RedisSerializer
-         *
          * 1. Jackson2JsonRedisSerializer
          * 2. GenericFastJsonRedisSerializer 或 FastJsonRedisSerializer
          * 3. StringRedisSerializer (只能支持String)
-         * *********************/
+         */
 
+        // key, value 序列化
         redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer(new GenericFastJsonRedisSerializer() );
+        redisTemplate.setValueSerializer(new GenericFastJsonRedisSerializer());
 
         //连接驱动的配置
         redisTemplate.setConnectionFactory(lettuceConnectionFactory());
 
         return redisTemplate;
-
     }
 
 
@@ -72,33 +67,24 @@ public class RedisConfig {
      */
     @Bean
     public LettuceConnectionFactory lettuceConnectionFactory() {
-
-
-        //redis集群的配置
-
+        // redis 集群的配置: 只有集群地址
         Map<String, Object> map = new HashMap<>();
-        map.put("spring.redis.cluster.nodes",redisProperties.getNodes());
+        map.put("spring.redis.cluster.nodes", redisProperties.getNodes()); // 集群列表 ip: port
 
         RedisClusterConfiguration redisClusterConfiguration =
                 new RedisClusterConfiguration(
-                        new MapPropertySource(
-                                "RedisClusterConfiguration",
-                                map)
+                        new MapPropertySource("RedisClusterConfiguration", map)
                 );
 
-        /* **********************
-         *
+        /*
          * redis集群方式的不同，需要使用对应的Redis配置实现类
          *
          * RedisClusterConfiguration: 集群
-         * RedisSentinelConfiguration： 哨兵
+         * RedisSentinelConfiguration：哨兵
          * RedisStandaloneConfiguration：单机
-         *
-         * *********************/
+         */
 
-
-        //Lettuce连接池的配置
-
+        // Lettuce连接池的配置
         GenericObjectPoolConfig genericObjectPoolConfig = new GenericObjectPoolConfig();
         genericObjectPoolConfig.setMaxWait(redisPoolProperties.getMaxWait());
         genericObjectPoolConfig.setMinIdle(redisPoolProperties.getMinIdle());

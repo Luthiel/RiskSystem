@@ -12,8 +12,6 @@ import java.math.BigDecimal;
 @Data
 public class ProductPO {
 
-    /**
-     * 商品价格
-     */
+    // 商品价格
     private BigDecimal price;
 }

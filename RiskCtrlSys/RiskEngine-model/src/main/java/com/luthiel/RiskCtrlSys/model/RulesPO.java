@@ -24,38 +24,24 @@ import java.util.List;
 @Data
 public class RulesPO {
 
-    /**
-     * 规则列表
-     */
+    // 规则列表
     private List<SingleRulePO> rules;
 
-    /**
-     * 规则唯一编码
-     */
+    // 规则唯一编码
     private String rule_code;
 
-    /**
-     * 规则组唯一编码
-     */
+    // 规则组唯一编码
     private String set_code;
 
-    /**
-     * 规则组名称
-     */
+    // 规则组名称
     private String rule_set_name;
 
-    /**
-     * 策略
-     */
+    // 策略
     private ActivityPO activity;
 
-    /**
-     * 行为事件列表
-     */
+    // 行为事件列表
     private List<String> eventNames;
 
-    /**
-     * Mysql操作时间戳 (用于生成水印)
-     */
+    // Mysql 操作时间戳 (用于生成水印，毫秒)
     private long ts_ms;
 }

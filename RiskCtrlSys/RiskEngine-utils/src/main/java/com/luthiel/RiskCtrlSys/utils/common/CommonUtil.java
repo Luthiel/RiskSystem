@@ -30,9 +30,6 @@ public class CommonUtil {
      * 2.
      * static <T> T 指 返回值是 T 这个泛型的数据类型
      *
-     *
-     *
-     *
      * *********************/
 
     /**

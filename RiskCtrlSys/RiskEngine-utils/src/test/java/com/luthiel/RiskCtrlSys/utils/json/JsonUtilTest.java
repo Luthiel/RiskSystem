@@ -1,12 +1,11 @@
 package com.luthiel.RiskCtrlSys.utils.json;
 
+import java.util.List;
+import java.util.Map;
 import lombok.Data;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * author: Luthiel
@@ -54,9 +53,10 @@ public class JsonUtilTest {
                 "{\"color\":\"白色\",\"specs\":\"124GB\"}" +
                 "]}";
 
-        Map<String,List<Product>> map =  JsonUtil.jsonStr2Map(json,String.class,Product.class);
+        Map<String,List<Product>> map =  JsonUtil.jsonStr2Map(json,String.class, Product.class);
         List<Product> products = map.get("data");
         for(Product product:products){
+            System.out.println(product.getColor());
             System.out.println(product.getSpecs());
         }
 

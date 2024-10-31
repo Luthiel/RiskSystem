@@ -51,7 +51,7 @@ public class LuthielDeserializationSchema implements KafkaDeserializationSchema<
 
         KafkaMessagePO kafkaMessagePO = null;
         if(consumerRecord != null) {
-            String value =  new String(consumerRecord.value(),ENCODEING);
+            String value =  new String(consumerRecord.value(), ENCODEING);
             long offset = consumerRecord.offset();
             int partition = consumerRecord.partition();
             kafkaMessagePO = JsonUtil.jsonStr2Obj(value,KafkaMessagePO.class);

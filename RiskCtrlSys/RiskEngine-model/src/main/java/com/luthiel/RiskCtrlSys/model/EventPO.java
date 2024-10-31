@@ -10,69 +10,36 @@ import lombok.Data;
 
 @Data
 public class EventPO {
-
-    /* **********************
-     *
-     * 注意：
-     *
-     * 属性名称要和写入到Mysql的属性名称一致
-     *
-     *
-     * *********************/
-
-
-
-    /**
-     * 用户id
-     */
+     // 注意：属性名称要和写入到Mysql的属性名称一致
+     // 用户 ID
     private Integer user_id_int;
 
-    /**
-     * 事件发生时间
-     */
+     // 事件发生时间
     private String event_time;
 
-
-    /**
-     * 事件目标名称
-     */
+     // 事件目标名称
     private String event_target_name;
 
-    /**
-     * 事件名称
-     */
+    // 事件名称
     private String event_name;
-    /**
-     * 事件类型
-     */
+
+    // 事件类型
     private String event_type;
-    /**
-     * 事件上下文
-     */
+
+    // 事件上下文
     private EventContextPO event_context;
 
-    /**
-     * 指标各配置参数
-     */
+    // 指标各配置参数
     private MetricsConfPO metrics_conf;
 
-    /**
-     * 原子规则
-     */
+    // 原子规则
     private SingleRulePO singleRule;
 
-    /**
-     * 规则组
-     */
+    // 规则组
     private RulesPO rules;
 
-    /**
-     * kafka offset
-     */
+    // Kafka 偏移量、分区
     private long offset;
-    /**
-     * kafka partition
-     */
     private int partition;
 
     public EventPO() {

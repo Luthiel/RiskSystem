@@ -1,7 +1,6 @@
 package com.luthiel.RiskCtrlSys.utils.hbase;
 
 import com.luthiel.RiskCtrlSys.utils.Application;
-import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Admin;
 import org.apache.hadoop.hbase.client.Connection;
 import org.junit.jupiter.api.*;

@@ -11,12 +11,9 @@ import lombok.Data;
 @Data
 public class RiskInfoPO {
 
-    /**
-     * uid
-     */
+    // 用户 ID
     private int user_id_int;
-    /**
-     * 规则命中原因
-     */
+
+    // 规则命中原因
     private String hit_reason;
 }

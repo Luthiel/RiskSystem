@@ -5,6 +5,9 @@ import com.luthiel.RiskCtrlSys.flink.job.aviator.SumFunction;
 import org.apache.flink.cep.pattern.conditions.SimpleCondition;
 
 import java.io.Serializable;
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * author: Luthiel
@@ -32,11 +35,18 @@ public class LoginFailBySingletonCondition<T> extends SimpleCondition<T> impleme
     }
 
     @Override
-    public boolean filter(T eventPO) throws Exception {
-//        Map<String,Object> params=new HashMap<>();
-//        params.put("data",eventPO.getEvent_name());
-//        //Aviator 表达式计算
-//        return (Boolean) AviatorEvaluator.execute(expression,params);
-        return true;
+    public boolean filter(T event) {
+        Map<String,Object> params=new HashMap<>();
+        try {
+            Method method = event.getClass().getMethod("getEvent_name");
+            String name = (String) method.invoke(event);
+            params.put("data", name);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //Aviator 表达式计算
+        return (Boolean) AviatorEvaluator.execute(expression, params);
+//        return true;
     }
 }

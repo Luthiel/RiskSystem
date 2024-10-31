@@ -11,12 +11,8 @@ import lombok.Data;
 @Data
 public class ActionPO {
 
-    /**
-     * 策略动作方法
-     */
+    // 策略动作
     private String action;
-    /**
-     * 风险信息
-     */
+    // 风险信息
     private RiskInfoPO info;
 }

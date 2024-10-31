@@ -30,21 +30,8 @@ public class HbaseUtil {
      * @return org.apache.hadoop.hbase.client.Connection
      */
     public Connection getConnection() throws IOException {
-
-        /* **********************
-         *
-         * 知识点：
-         *
-         * 连接Hbase的正确姿势是所有的进程共用一个Connection对象
-         *
-         * *********************/
-
-        /* **********************
-         *
-         * 使用双重验证的单例模式生成Connection对象
-         *
-         * *********************/
-
+        // 单例，双重校验锁
+        // Hbase：所有的进程共用一个Connection对象
         if(connection == null) {
             synchronized (HbaseUtil.class) {
                 if (connection == null) {

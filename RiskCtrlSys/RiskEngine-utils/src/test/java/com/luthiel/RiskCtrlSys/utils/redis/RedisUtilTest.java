@@ -1,12 +1,11 @@
 package com.luthiel.RiskCtrlSys.utils.redis;
 
 import com.luthiel.RiskCtrlSys.utils.Application;
+import java.util.HashMap;
+import java.util.Map;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * author: Luthiel
