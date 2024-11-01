@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  */
 
 @RestControllerAdvice
-public class ApiExceptionHandler {
+public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = RedisException.class)
     public void RedisExceptionHandler(RedisException e) {
 
-        //TODO 错误处理
+        //TODO 错误处理-后端
     }
 }

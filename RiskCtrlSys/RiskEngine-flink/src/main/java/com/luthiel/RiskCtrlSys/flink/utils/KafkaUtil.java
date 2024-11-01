@@ -182,8 +182,7 @@ public class KafkaUtil {
      * @param parameter:  ParameterTool 对象 (不包含启动参数, 项目中主要用于单元测试)
      * @return org.apache.flink.streaming.api.datastream.DataStream<com.luthiel.RiskCtrlSys.model.EventPO>
      */
-    public static DataStream<EventPO> read(
-            ParameterTool parameter) {
+    public static DataStream<EventPO> read(ParameterTool parameter) {
 
         //初始化流式计算上下文环境
         parameterTool = parameter;

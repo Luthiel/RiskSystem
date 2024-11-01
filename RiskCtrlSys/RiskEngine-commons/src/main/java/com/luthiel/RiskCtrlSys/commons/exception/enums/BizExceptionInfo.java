@@ -1,7 +1,7 @@
 package com.luthiel.RiskCtrlSys.commons.exception.enums;
 
 /**
- * author: Wu
+ * author: Luthiel
  * description: 异常枚举类接口
  * date:  2023
 */

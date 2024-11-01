@@ -114,7 +114,7 @@ public class GroovyUtil {
             clazzMaps.put(md5, _groovyScript);
             // 获得实例
             GroovyObject groovyObject = (GroovyObject) groovyScript.newInstance();
-            // 反射调用方法
+            // 反射调用方法，传递的 method -> getPattern()
             obj = groovyObject.invokeMethod(method, args);
             return obj;
         }catch (Exception e){

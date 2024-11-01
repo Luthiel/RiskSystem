@@ -10,7 +10,7 @@ import lombok.Getter;
 
 @Getter
 public enum FlinkPropertiesExceptionInfo implements BizExceptionInfo {
-
+    // 枚举常量定义必须放在最前面
     PROPERTIES_NULL("-300", "配置参数不存在");
 
     private String exceptionCode;
@@ -22,5 +22,4 @@ public enum FlinkPropertiesExceptionInfo implements BizExceptionInfo {
         this.exceptionCode = exceptionCode;
         this.exceptionMsg = exceptionMsg;
     }
-
 }

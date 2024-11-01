@@ -29,13 +29,9 @@ public class PackageConfigGenerator implements Consumer<PackageConfig.Builder> {
                 .service(ConstantsUtil.SERVICE_PACKAGE) // 设置服务包
                 .serviceImpl(ConstantsUtil.SERVICE_IMPL_PACKAGE) // 设置服务实现包
                 .entity(ConstantsUtil.ENTITY_PACKAGE) // 设置实体包
-                .xml(ConstantsUtil.MAPPER_XML_PACKAGE) // 设置映射器XML包
-
-                .pathInfo(getPathInfo()) // 设置路径信息 (绝对路径)
-        ;
+                .xml(ConstantsUtil.MAPPER_XML_PACKAGE) // 设置映射器 XML 包
+                .pathInfo(getPathInfo()); // 设置路径信息 (绝对路径)
     }
-
-
 
     /**
      * 获取路径信息

@@ -14,7 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/hello")
 public class HelloController {
 
-    @RequestMapping(value = "/test",method = RequestMethod.POST)
+    @RequestMapping(value = "/test", method = RequestMethod.POST)
+    // = @PostMapping("/test")
     public String testHello() {
         return "this junit5 MockMvc Test";
     }

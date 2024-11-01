@@ -240,7 +240,7 @@ public class ParameterUtil {
          * 需要优化checkpoint的完成效率
          *
          * *********************/
-        //每60秒触发checkpoint
+        //每 60 秒触发checkpoint
         env.enableCheckpointing(parameterTool.getInt(ParameterConstantsUtil.FLINK_CHECKPOINT_INTERVAL));
         CheckpointConfig ck = env.getCheckpointConfig();
         // checkpoint 必须在60秒内结束，否则被丢弃

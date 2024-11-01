@@ -80,9 +80,9 @@ public class CepOperator<IN, KEY, OUT>
 
     private final TypeSerializer<IN> inputSerializer;
 
-    //第7个自定义代码
+    // 第7个自定义代码，自定义的动态 pattern
     private final DynamicPattern<IN> dynamicPattern;
-    //第8个自定义代码
+    // 第8个自定义代码，如果为 true，则 NFA 需要返回超时的事件 pattern
     private final boolean timeoutHandling;
 
     private List<Long> timerServiceRegister;
@@ -186,7 +186,7 @@ public class CepOperator<IN, KEY, OUT>
             @Nullable final AfterMatchSkipStrategy afterMatchSkipStrategy,
             final PatternProcessFunction<IN, OUT> function,
             @Nullable final OutputTag<IN> lateDataOutputTag,
-            //Pattern的配置信息流
+            // constructor for dynamic pattern
             final DynamicPattern<IN> dynamicPattern,
             final boolean timeoutHandling
             ) {
@@ -195,7 +195,7 @@ public class CepOperator<IN, KEY, OUT>
         this.inputSerializer = Preconditions.checkNotNull(inputSerializer);
         this.dynamicPattern = Preconditions.checkNotNull(dynamicPattern);
         this.timeoutHandling = timeoutHandling;
-        //第3个自定义代码
+        // 第 3 个自定义代码
         this.nfaFactory = nfaFactory;
 
         this.isProcessingTime = isProcessingTime;
@@ -240,7 +240,7 @@ public class CepOperator<IN, KEY, OUT>
                                         LongSerializer.INSTANCE,
                                         new ListSerializer<>(inputSerializer)));
 
-        //故障恢复
+        // 故障恢复
         if (context.isRestored()) {
             partialMatches.migrateOldState(getKeyedStateBackend(), computationStates);
         }
@@ -252,54 +252,33 @@ public class CepOperator<IN, KEY, OUT>
         super.open();
 
         // cep定时器初始化
-        timerService =
-                getInternalTimerService(
+        timerService = getInternalTimerService(
                         "watermark-callbacks", VoidNamespaceSerializer.INSTANCE, this);
 
         //第1块自定义代码
-        /* **********************
-         *
-         * 从定时器中获取最新的 Pattern, 构建新的NFA
-         *
-         * *********************/
-
-        if(dynamicPattern != null) {
-
+        // 从定时器中获取最新的 Pattern, 构建新的NFA
+        if (this.dynamicPattern != null) {
             Pattern<IN, ?> _pattern = null;
-            //如果获取的Pattern是null, 抛出错误
+            // 如果获取的 Pattern 是 null, 抛出错误
             try {
-                //通过携带进来的自定义类 DynamicPattern 去获取Pattern
+                // 通过携带进来的自定义类 DynamicPattern 去获取 Pattern
                 _pattern = dynamicPattern.getDynamicPattern();
-//            System.out.println(_pattern);
-            }catch (NullPointerException e) {
+            } catch (NullPointerException e) {
                 throw new RuntimeException("Pattern is null");
             }
 
-            /* **********************
-             *
-             * 一定要确保获取的Pattern正确, 后面的基本不会报错, 都是源码内容
-             *
-             * *********************/
-
-
-            //NFA初始化
-            //在compileFactory做了两件事：
-            // 1.生成cep State 2.将pattern 和 cep States 关联起来,
+            // 一定要确保获取的Pattern正确, 后面的基本不会报错, 都是源码内容
+            // NFA初始化, 在 compileFactory 做了两件事：
+            // 1.生成 cep State 2.将 pattern 和 cep States 关联起来
             NFACompiler.NFAFactory<IN> _nfaFactory_luthiel =
                     NFACompiler.compileFactory(_pattern, timeoutHandling);
 
             nfa = _nfaFactory_luthiel.createNFA();
-            //System.out.println(nfa);
 
-
-            //使用Flink内置的定时器功能 (只能通过getProcessingTimeService()获取)
-            getProcessingTimeService().registerTimer(timerService.currentProcessingTime()+1*1000L,this::onProcessingTime);
-
-
-        }else {
-
+            // 使用 Flink 内置的定时器功能 (只能通过 getProcessingTimeService() 获取)
+            getProcessingTimeService().registerTimer(timerService.currentProcessingTime() + 1 * 1000L, this::onProcessingTime);
+        } else {
             nfa = nfaFactory.createNFA();
-
         }
 
         nfa.open(cepRuntimeContext, new Configuration());
@@ -312,19 +291,19 @@ public class CepOperator<IN, KEY, OUT>
         this.numLateRecordsDropped = metrics.counter(LATE_ELEMENTS_DROPPED_METRIC_NAME);
     }
 
-    //第2块自定义代码
+
     /**
      * author: Luthiel
-     * description: 第8个自定义方法, 定时器返回
+     * description: 8.定时器返回
      * @param l:
      * @return void
      */
     @Override
     public void onProcessingTime(long l) throws Exception {
-        //如果 Pattern 配置发生更改
+        // 如果 Pattern 配置发生更改，重新加载（动态 Pattern）
         if(dynamicPattern.patternChange()) {
             Pattern<IN, ?> _pattern_update = null;
-            //如果获取的Pattern是null, 抛出错误
+            // 如果获取的 Pattern 是 null, 抛出错误
             try {
                 //重新获取 Pattern
                 _pattern_update = dynamicPattern.getDynamicPattern();
@@ -332,16 +311,14 @@ public class CepOperator<IN, KEY, OUT>
                 throw new RuntimeException("Pattern is null");
             }
 
-//            System.out.println(_pattern_update);
             //重新构建 NFA
             NFACompiler.NFAFactory<IN> _nfaFactory_luthiel_update =
                     NFACompiler.compileFactory(_pattern_update, timeoutHandling);
             nfa = _nfaFactory_luthiel_update.createNFA();
-//            System.out.println(nfa);
         }
 
         //重新注册定时器
-        getProcessingTimeService().registerTimer(timerService.currentProcessingTime()+1*1000L,this::onProcessingTime);
+        getProcessingTimeService().registerTimer(timerService.currentProcessingTime() + 1 * 1000L,this::onProcessingTime);
     }
 
     @Override
@@ -354,24 +331,15 @@ public class CepOperator<IN, KEY, OUT>
 
     @Override
     public void processElement(StreamRecord<IN> element) throws Exception {
-    //对接收的数据进行处理
+        //对接收的数据进行处理
 
-        /* **********************
-         *
-         * 选择 processElement() 做状态清理的原因: 这是新数据进入的第一站。
-         * 新的一条数据进入, 不应该再应用旧的Pattern 状态,
-         *
-         * *********************/
-
-
-        //第9个自定义代码
+        // 选择 processElement() 做状态清理的原因: 这是新数据进入的第一站，新的一条数据进入, 不应该再应用旧的 Pattern 状态
+        // 第 9 个自定义代码
         if(dynamicPattern != null) {
-
             // cep State 清理
-
             computationStates.clear();
             elementQueueState.clear();
-            //partialMatches.releaseData();
+            // partialMatches.releaseData();
 
             // cep 排序定时器清理
             Iterator<Long> it = timerServiceRegister.iterator();
@@ -386,7 +354,7 @@ public class CepOperator<IN, KEY, OUT>
 
 
         // isProcessingTime && comparator == null 才进行数据处理
-        // comparator是比较器,isProcessingTime是Flink的时间语义
+        // comparator 是比较器, isProcessingTime 是 Flink 的时间语义
 
         if (isProcessingTime) {
             if (comparator == null) {
@@ -394,11 +362,12 @@ public class CepOperator<IN, KEY, OUT>
                 NFAState nfaState = getNFAState();
                 long timestamp = getProcessingTimeService().getCurrentProcessingTime();
                 advanceTime(nfaState, timestamp);
-                //对每一条数据进行匹配
+                // 对每一条数据进行匹配
                 processEvent(nfaState, element.getValue(), timestamp);
                 updateNFA(nfaState);
             } else {
                 long currentTime = timerService.currentProcessingTime();
+                // 状态存入 elementQueueState
                 bufferEvent(element.getValue(), currentTime);
 
                 // register a timer for the next millisecond to sort and emit buffered data
@@ -407,7 +376,6 @@ public class CepOperator<IN, KEY, OUT>
             }
 
         } else {
-
             // 获取事件时间
             long timestamp = element.getTimestamp();
             // 获取数据
@@ -426,7 +394,7 @@ public class CepOperator<IN, KEY, OUT>
 
                 saveRegisterWatermarkTimer();
 
-                //对每一条数据进行匹配
+                // 对每一条数据进行匹配
                 bufferEvent(value, timestamp);
 
             } else if (lateDataOutputTag != null) {
@@ -451,7 +419,7 @@ public class CepOperator<IN, KEY, OUT>
         }
     }
 
-    //第10个自定义代码
+    // 第 10 个自定义代码
     private void bufferEvent(IN event, long currentTime) throws Exception {
         List<IN> elementsForTimestamp = elementQueueState.get(currentTime);
         if (elementsForTimestamp == null) {
@@ -460,7 +428,7 @@ public class CepOperator<IN, KEY, OUT>
 
         elementsForTimestamp.add(event);
 
-        //把当前事件放入 elementQueueState
+        // 把当前事件放入 elementQueueState
         elementQueueState.put(currentTime, elementsForTimestamp);
     }
 
@@ -581,7 +549,6 @@ public class CepOperator<IN, KEY, OUT>
         // 匹配数据
 
         try (SharedBufferAccessor<IN> sharedBufferAccessor = partialMatches.getAccessor()) {
-            //
             Collection<Map<String, List<IN>>> patterns =
                     nfa.process(
                             sharedBufferAccessor,
@@ -725,14 +692,10 @@ public class CepOperator<IN, KEY, OUT>
         return numLateRecordsDropped.getCount();
     }
 
-    //第11个自定义代码
+    //第 11 个自定义代码
     private void saveTimerServiceRegister(long l) {
-        if(dynamicPattern!=null){
+        if (dynamicPattern != null){
             timerServiceRegister.add(l);
         }
     }
-
-
-
-
 }
